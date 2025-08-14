@@ -1,8 +1,7 @@
 /**
- * Classe que representa uma calculadora básica com operações aritméticas.
+ * Classe que representa uma calculadora básica.
  */
 public class Calculadora {
-
     /**
      * Soma dois números.
      * @param a primeiro número

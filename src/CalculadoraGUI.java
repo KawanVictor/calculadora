@@ -1,121 +1,184 @@
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.text.DecimalFormat;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
- * Interface gráfica da calculadora básica.
+ * Interface gráfica moderna e otimizada da calculadora.
  */
 public class CalculadoraGUI extends JFrame {
 
     private JTextField campoA, campoB, campoResultado;
     private final Calculadora calculadora = new Calculadora();
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.########");
 
-    /**
-     * Construtor da interface gráfica.
-     */
     public CalculadoraGUI() {
-        setTitle("Calculadora Estilizada");
-        setSize(370, 320);
+        setTitle("Calculadora Simples");
+        setSize(430, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBackground(new Color(45, 52, 54)); // Cor de fundo cinza escuro
+        // Painel principal com layout e cor de fundo moderna
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(new Color(32, 34, 37));
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(12, 10, 12, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = gbc.gridy = 0;
+
+        JLabel lblTitulo = new JLabel("Calculadora");
+        lblTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 28));
+        lblTitulo.setForeground(new Color(240, 240, 240));
+        gbc.gridwidth = 2;
+        panel.add(lblTitulo, gbc);
+
+        // Valor 1
+        gbc.gridy++;
+        gbc.gridwidth = 1;
         JLabel lblA = new JLabel("Valor 1:");
-        lblA.setBounds(30, 30, 60, 30);
+        lblA.setFont(new Font("Arial", Font.PLAIN, 20));
         lblA.setForeground(Color.WHITE);
-        panel.add(lblA);
+        panel.add(lblA, gbc);
 
+        gbc.gridx = 1;
         campoA = new JTextField();
-        campoA.setBounds(100, 30, 220, 30);
-        panel.add(campoA);
+        campoA.setFont(new Font("Arial", Font.PLAIN, 18));
+        campoA.setBackground(new Color(55, 65, 81));
+        campoA.setForeground(Color.WHITE);
+        campoA.setBorder(BorderFactory.createLineBorder(new Color(64,126,219),2));
+        panel.add(campoA, gbc);
 
+        // Valor 2
+        gbc.gridx = 0; gbc.gridy++;
         JLabel lblB = new JLabel("Valor 2:");
-        lblB.setBounds(30, 70, 60, 30);
+        lblB.setFont(new Font("Arial", Font.PLAIN, 20));
         lblB.setForeground(Color.WHITE);
-        panel.add(lblB);
+        panel.add(lblB, gbc);
 
+        gbc.gridx = 1;
         campoB = new JTextField();
-        campoB.setBounds(100, 70, 220, 30);
-        panel.add(campoB);
+        campoB.setFont(new Font("Arial", Font.PLAIN, 18));
+        campoB.setBackground(new Color(55, 65, 81));
+        campoB.setForeground(Color.WHITE);
+        campoB.setBorder(BorderFactory.createLineBorder(new Color(64,126,219),2));
+        panel.add(campoB, gbc);
 
-        JButton btnSomar = criarBotao("+");
-        btnSomar.setBounds(30, 120, 70, 50);
-        panel.add(btnSomar);
+        // Botões operações
+        gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
+        JPanel painelBotoes = new JPanel(new GridLayout(1, 4, 16, 0));
+        painelBotoes.setBackground(panel.getBackground());
+        painelBotoes.add(criarBotao("+", 's', new Color(39, 174, 96)));
+        painelBotoes.add(criarBotao("-", 'u', new Color(231, 76, 60)));
+        painelBotoes.add(criarBotao("×", 'm', new Color(241, 196, 15)));
+        painelBotoes.add(criarBotao("÷", 'd', new Color(41, 128, 185)));
+        panel.add(painelBotoes, gbc);
 
-        JButton btnSubtrair = criarBotao("-");
-        btnSubtrair.setBounds(110, 120, 70, 50);
-        panel.add(btnSubtrair);
-
-        JButton btnMultiplicar = criarBotao("x");
-        btnMultiplicar.setBounds(190, 120, 70, 50);
-        panel.add(btnMultiplicar);
-
-        JButton btnDividir = criarBotao("/");
-        btnDividir.setBounds(270, 120, 70, 50);
-        panel.add(btnDividir);
-
+        // Resultado
+        gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 1;
         JLabel lblResultado = new JLabel("Resultado:");
-        lblResultado.setBounds(30, 190, 90, 30);
-        lblResultado.setForeground(Color.WHITE);
-        panel.add(lblResultado);
+        lblResultado.setFont(new Font("Arial", Font.BOLD, 22));
+        lblResultado.setForeground(new Color(162, 196, 252));
+        panel.add(lblResultado, gbc);
 
+        gbc.gridx = 1;
         campoResultado = new JTextField();
-        campoResultado.setBounds(120, 190, 170, 30);
+        campoResultado.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 28));
         campoResultado.setEditable(false);
-        campoResultado.setBackground(new Color(178, 190, 195));
-        panel.add(campoResultado);
+        campoResultado.setBackground(new Color(80,120,180));
+        campoResultado.setForeground(Color.WHITE);
+        campoResultado.setHorizontalAlignment(JTextField.CENTER);
+        campoResultado.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(64,126,219),3),
+            BorderFactory.createEmptyBorder(7, 7, 7, 7)
+        ));
+        panel.add(campoResultado, gbc);
+
+        // Botão copiar resultado
+        gbc.gridy++; gbc.gridx = 1; gbc.gridwidth = 1;
+        JButton btnCopiar = criarBotaoCopiar();
+        panel.add(btnCopiar, gbc);
 
         add(panel);
 
-        // Listeners para botões
-        btnSomar.addActionListener(e -> calcular('s'));
-        btnSubtrair.addActionListener(e -> calcular('u'));
-        btnMultiplicar.addActionListener(e -> calcular('m'));
-        btnDividir.addActionListener(e -> calcular('d'));
+        // Suporte a teclado e atalhos
+        addAtalhosTeclado();
+
+        // Permite colar (ctrl + v) nos campos de entrada nativamente
     }
 
-    /**
-     * Cria um botão estilizado.
-     * @param texto Texto do botão
-     * @return JButton estilizado
-     */
-    private JButton criarBotao(String texto) {
+    /** Cria botões coloridos de operação com funcionalidade e efeito hover. */
+    private JButton criarBotao(String texto, char op, Color cor) {
         JButton botao = new JButton(texto);
-        botao.setBackground(new Color(99, 110, 114));
+        botao.setBackground(cor);
         botao.setForeground(Color.WHITE);
-        botao.setFont(new Font("Arial", Font.BOLD, 24));
         botao.setFocusPainted(false);
+        botao.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
+        botao.setBorder(BorderFactory.createLineBorder(new Color(52, 52, 52),2,true));
+        botao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        botao.setToolTipText("Operação " + texto);
+        botao.addActionListener(e -> calcular(op));
+        botao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) { botao.setBackground(cor.brighter()); }
+            public void mouseExited(java.awt.event.MouseEvent evt) { botao.setBackground(cor); }
+        });
         return botao;
     }
 
-    /**
-     * Executa o cálculo baseado na operação escolhida.
-     * @param op Código da operação ('s', 'u', 'm', 'd')
-     */
+    /** Botão para copiar o resultado para a área de transferência. */
+    private JButton criarBotaoCopiar() {
+        JButton copiar = new JButton("📋 Copiar resultado");
+        copiar.setFont(new Font("Arial", Font.PLAIN, 16));
+        copiar.setBackground(new Color(80, 120, 180));
+        copiar.setForeground(Color.WHITE);
+        copiar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        copiar.setFocusPainted(false);
+        copiar.setToolTipText("Copiar resultado para área de transferência");
+        copiar.addActionListener(e -> {
+            String texto = campoResultado.getText();
+            StringSelection sel = new StringSelection(texto);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(sel, null);
+        });
+        return copiar;
+    }
+
+    /** Adiciona atalhos de teclado para somar/subtrair/multiplicar/dividir e Enter para soma. */
+    private void addAtalhosTeclado() {
+        KeyAdapter listener = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    calcular('s'); // Enter = soma
+                } else if (e.getKeyChar() == '+') calcular('s');
+                else if (e.getKeyChar() == '-') calcular('u');
+                else if (e.getKeyChar() == '*') calcular('m');
+                else if (e.getKeyChar() == '/') calcular('d');
+                // Permite a navegação com TAB
+            }
+        };
+        campoA.addKeyListener(listener);
+        campoB.addKeyListener(listener);
+    }
+
+    /** Calcula ação, com suporte decimais, negativos e formato brasileiro. */
     private void calcular(char op) {
         try {
-            double a = Double.parseDouble(campoA.getText());
-            double b = Double.parseDouble(campoB.getText());
+            String valorA = campoA.getText().replace(",", ".").trim();
+            String valorB = campoB.getText().replace(",", ".").trim();
+            double a = Double.parseDouble(valorA);
+            double b = Double.parseDouble(valorB);
             double resultado;
             switch (op) {
-                case 's':
-                    resultado = calculadora.somar(a, b);
-                    break;
-                case 'u':
-                    resultado = calculadora.subtrair(a, b);
-                    break;
-                case 'm':
-                    resultado = calculadora.multiplicar(a, b);
-                    break;
-                case 'd':
-                    resultado = calculadora.dividir(a, b);
-                    break;
-                default:
-                    resultado = 0;
+                case 's': resultado = calculadora.somar(a, b); break;
+                case 'u': resultado = calculadora.subtrair(a, b); break;
+                case 'm': resultado = calculadora.multiplicar(a, b); break;
+                case 'd': resultado = calculadora.dividir(a, b); break;
+                default: resultado = 0;
             }
-            campoResultado.setText(String.valueOf(resultado));
+            mostrarResultado(resultado);
         } catch (NumberFormatException ex) {
             campoResultado.setText("Entrada inválida!");
         } catch (IllegalArgumentException ex) {
@@ -123,10 +186,16 @@ public class CalculadoraGUI extends JFrame {
         }
     }
 
-    /**
-     * Inicializa a aplicação.
-     * @param args argumentos de linha de comando
-     */
+    /** Exibe o resultado: como inteiro se possível, senão com até 8 casas decimais. */
+    private void mostrarResultado(double resultado) {
+        long valorInteiro = (long) resultado;
+        if (resultado == valorInteiro) {
+            campoResultado.setText(String.valueOf(valorInteiro));
+        } else {
+            campoResultado.setText(decimalFormat.format(resultado));
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new CalculadoraGUI().setVisible(true));
     }
