@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CalculadoraGUI",
+            "request": "launch",
+            "mainClass": "CalculadoraGUI",
+            "projectName": "Calculadora_44aa3526"
+        },
+        {
+            "name": "JUnit Test",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "",
+            "classpath": "${workspaceFolder}/bin;${workspaceFolder}/lib/*",
+            "sourcePaths": [
+                "${workspaceFolder}/src"
+            ]
+        }
+    ]
+}
